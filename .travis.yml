@@ -28,3 +28,4 @@ script:
 
 after_script:
  - travis_retry vendor/bin/php-coveralls -v
+
