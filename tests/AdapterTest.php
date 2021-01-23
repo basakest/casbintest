@@ -84,6 +84,18 @@ class AdapterTest extends TestCase
 
     public function testAddPolicies()
     {
+        $policies = [
+            ['u1', 'd1', 'read'],
+            ['u2', 'd2', 'read'],
+            ['u3', 'd3', 'read'],
+        ];
+        $e = $this->getEnforcer();
+        $e->clearPolicy();
+        $this->initDb($this->adapter);
+        $this->assertEquals([], $e->getPolicy());
+        $e->addPolicies($policies);
+        $this->assertEquals($policies, $e->getPolicy());
+        /*
         $e = $this->getEnforcer();
         $this->assertFalse($e->enforce('eve', 'data3', 'read'));
         $this->assertFalse($e->enforce('eve', 'data3', 'write'));
@@ -91,6 +103,7 @@ class AdapterTest extends TestCase
         $e->addPolicies([['eve', 'data3', 'read'], ['eve', 'data3', 'write']]);
         $this->assertTrue($e->enforce('eve', 'data3', 'read'));
         $this->assertTrue($e->enforce('eve', 'data3', 'write'));
+        */
     }
 
     public function testSavePolicy()
@@ -120,14 +133,33 @@ class AdapterTest extends TestCase
     public function testRemovePolicies()
     {
         $e = $this->getEnforcer();
+        $this->assertEquals([
+            ['alice', 'data1', 'read'],
+            ['bob', 'data2', 'write'],
+            ['data2_admin', 'data2', 'read'],
+            ['data2_admin', 'data2', 'write'],
+        ], $e->getPolicy());
+
+        $e->removePolicies([
+            ['data2_admin', 'data2', 'read'],
+            ['data2_admin', 'data2', 'write'],
+        ]);
+
+        $this->assertEquals([
+            ['alice', 'data1', 'read'],
+            ['bob', 'data2', 'write']
+        ], $e->getPolicy());
+        /*
+        $e = $this->getEnforcer();
         $this->assertFalse($e->enforce('alice', 'data5', 'read'));
+        $this->assertFalse($e->enforce('alice', 'data5', 'write'));
         $e->addPolicies([['alice', 'data5', 'read'], ['alice', 'data5', 'write']]);
         $this->assertTrue($e->enforce('alice', 'data5', 'read'));
         $this->assertTrue($e->enforce('alice', 'data5', 'write'));
         $e->removePolicies([['alice', 'data5', 'read'], ['alice', 'data5', 'write']]);
-        $e->deletePermissionForUser('alice', 'data5', 'read');
         $this->assertFalse($e->enforce('alice', 'data5', 'read'));
         $this->assertFalse($e->enforce('alice', 'data5', 'write'));
+        */
     }
 
     public function testRemoveFilteredPolicy()
