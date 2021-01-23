@@ -91,7 +91,7 @@ class AdapterTest extends TestCase
         ];
         $e = $this->getEnforcer();
         $e->clearPolicy();
-        $this->initDb($this->adapter);
+        $this->initDb(DatabaseAdapter::newAdapter($this->config));
         $this->assertEquals([], $e->getPolicy());
         $e->addPolicies($policies);
         $this->assertEquals($policies, $e->getPolicy());
