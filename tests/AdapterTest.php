@@ -7,6 +7,8 @@ use CasbinAdapter\Database\Adapter as DatabaseAdapter;
 use PHPUnit\Framework\TestCase;
 use TechOne\Database\Manager;
 use Casbin\Persist\Adapters\Filter;
+use phpDocumentor\Reflection\Types\Array_;
+
 class AdapterTest extends TestCase
 {
     protected $config = [];
@@ -63,9 +65,10 @@ class AdapterTest extends TestCase
     public function testLoadFilteredPolicy()
     {
         $e = $this->getEnforcer();
+        $e->clearPolicy();
         $adapter = DatabaseAdapter::newAdapter($this->config);
         $adapter->setFiltered(true);
-        //$this->assertEquals([], $e->getPolicy());
+        $this->assertEquals([], $e->getPolicy());
         
         // string
         $filter = "v0 = 'bob'";
