@@ -62,15 +62,35 @@ class AdapterTest extends TestCase
     
     public function testLoadFilteredPolicy()
     {
+        $this->initConfig();
+        $adapter = DatabaseAdapter::newAdapter($this->config);
+        $adapter->setFiltered(true);
         $e = $this->getEnforcer();
-        $e->loadFilteredPolicy(new Filter(['alice']));
-        $model = $e->getModel();
-        $this->assertTrue(!empty($model['p']['p']->policy));
-        $model->clearPolicy();
+        $this->assertEquals([], $e->getPolicy());
 
-        $e->loadFilteredPolicy(new Filter(['xxxxx12v']));
-        $model = $e->getModel();
-        $this->assertFalse(!empty($model['p']['p']->policy));
+        // string
+        $filter = "v0 = 'bob'";
+        $e->loadFilteredPolicy($filter);
+        $this->assertEquals([
+            ['bob', 'data2', 'write']
+        ], $e->getPolicy());
+
+        // Filter
+        $filter = new Filter('v2 = ?', ['read']);
+        $e->loadFilteredPolicy($filter);
+        $this->assertEquals([
+            ['alice', 'data1', 'read'],
+            ['data2_admin', 'data2', 'read'],
+        ], $e->getPolicy());
+
+        // Closure
+        $e->loadFilteredPolicy(function ($connection, $sql, &$rows) {
+            $rows = $connection->query($sql);
+        });
+
+        $this->assertEquals([
+            ['alice', 'data1', 'read'],
+        ], $e->getPolicy());
     }
 
     public function testAddPolicy()

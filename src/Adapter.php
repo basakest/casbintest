@@ -10,6 +10,7 @@ use Casbin\Persist\FilteredAdapter;
 use Casbin\Persist\Adapters\Filter;
 use Casbin\Exceptions\InvalidFilterTypeException;
 use Casbin\Persist\BatchAdapter;
+use Casbin\Persist\UpdatableAdapter;
 use Closure;
 use Throwable;
 
@@ -273,6 +274,6 @@ class Adapter implements AdapterContract, FilteredAdapter, BatchAdapter
             $line = implode(', ', $row);
             $this->loadPolicyLine($line, $model);
         }
-        $this->filtered = true;
+        $this->setFiltered(true);
     }
 }
