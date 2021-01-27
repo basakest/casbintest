@@ -65,15 +65,15 @@ class AdapterTest extends TestCase
         $e = $this->getEnforcer();
         $adapter = DatabaseAdapter::newAdapter($this->config);
         $adapter->setFiltered(true);
-        $this->assertEquals([], $e->getPolicy());
-        $e->clearPolicy();
+        //$this->assertEquals([], $e->getPolicy());
+        
         // string
         $filter = "v0 = 'bob'";
         $e->loadFilteredPolicy($filter);
         $this->assertEquals([
             ['bob', 'data2', 'write', '', '', '']
         ], $e->getPolicy());
-        $e->clearPolicy();
+        
         // Filter
         $filter = new Filter(['', '', 'read']);
         $e->loadFilteredPolicy($filter);
@@ -81,7 +81,7 @@ class AdapterTest extends TestCase
             ['alice', 'data1', 'read', '', '', ''],
             ['data2_admin', 'data2', 'read', '', '', ''],
         ], $e->getPolicy());
-        $e->clearPolicy();
+        
         // Closure
         $e->loadFilteredPolicy(function ($connection, $sql, &$rows) {
             $sql .= "v0 = 'alice'";
