@@ -66,21 +66,21 @@ class AdapterTest extends TestCase
         $adapter = DatabaseAdapter::newAdapter($this->config);
         $adapter->setFiltered(true);
         $e = $this->getEnforcer();
-        $this->assertEquals([], $e->getPolicy());
+        $this->assertEquals(['', '', '', '', '', ''], $e->getPolicy());
 
         // string
         $filter = "v0 = 'bob'";
         $e->loadFilteredPolicy($filter);
         $this->assertEquals([
-            ['bob', 'data2', 'write']
+            ['bob', 'data2', 'write', '', '', '']
         ], $e->getPolicy());
 
         // Filter
-        $filter = new Filter('v2 = ?', ['read']);
+        $filter = new Filter(['', '', 'read']);
         $e->loadFilteredPolicy($filter);
         $this->assertEquals([
-            ['alice', 'data1', 'read'],
-            ['data2_admin', 'data2', 'read'],
+            ['alice', 'data1', 'read', '', '', ''],
+            ['data2_admin', 'data2', 'read', '', '', ''],
         ], $e->getPolicy());
 
         // Closure
@@ -89,7 +89,7 @@ class AdapterTest extends TestCase
         });
 
         $this->assertEquals([
-            ['alice', 'data1', 'read'],
+            ['alice', 'data1', 'read', '', '', ''],
         ], $e->getPolicy());
     }
 

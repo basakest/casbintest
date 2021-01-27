@@ -20,7 +20,7 @@ $config = [
 $model = Model::newModelFromFile('./model.conf');
 $adapter = Adapter::newAdapter($config);
 //不能带v
-$adapter->removePolicies('p', 'p', [['0' => 'jack'], ['0' => 'alice']]);
+//$adapter->removePolicies('p', 'p', [['0' => 'jack'], ['0' => 'alice']]);
 //$adapter->addPolicies('p', 'p', [['p', 'alice', 'data1', 'read'], ['p', 'jack', 'data1', 'write']]);
 //$e = new Enforcer('./model.conf', $adapter);
 $e = new Enforcer($model, $adapter);
@@ -29,7 +29,6 @@ $e = new Enforcer($model, $adapter);
 //$e->enforce('alice', 'data1', 'read');exit;
 //var_dump($e->enforce('alice', 'data1', 'read'));exit;
 //var_dump($e->enforceWithMatcher('eval(alice)', 'alice', 'data1', 'read'));exit;
-exit;
 $sub = "alice"; // the user that wants to access a resource.
 $obj = "data1"; // the resource that is going to be accessed.
 $act = "read"; // the operation that the user performs on the resource.
@@ -37,6 +36,7 @@ $act = "read"; // the operation that the user performs on the resource.
 try {
     $filter = new Filter(['', '', 'read']);
     $e->loadFilteredPolicy($filter);
+    var_dump($e->getPolicy());
     var_dump($model['p']['p']->policy);
 } catch (InvalidFilterTypeException $e) {
     echo $e->getMessage();
