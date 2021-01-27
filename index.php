@@ -34,10 +34,10 @@ $obj = "data1"; // the resource that is going to be accessed.
 $act = "read"; // the operation that the user performs on the resource.
 //$e->addPolicy('alice', 'data12', 'read');exit;
 try {
-    $filter = new Filter(['', '', 'read']);
-    $e->loadFilteredPolicy($filter);
+    //$filter = new Filter(['', '', 'read']);
+    $e->loadFilteredPolicy("v0 = 'jj'");
     var_dump($e->getPolicy());
-    var_dump($model['p']['p']->policy);
+    //var_dump($model['p']['p']->policy);
 } catch (InvalidFilterTypeException $e) {
     echo $e->getMessage();
 }

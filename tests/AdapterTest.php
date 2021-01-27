@@ -62,11 +62,10 @@ class AdapterTest extends TestCase
     
     public function testLoadFilteredPolicy()
     {
-        $this->initConfig();
         $adapter = DatabaseAdapter::newAdapter($this->config);
         $adapter->setFiltered(true);
         $e = $this->getEnforcer();
-        $this->assertEquals(['', '', '', '', '', ''], $e->getPolicy());
+        $this->assertEquals([], $e->getPolicy());
 
         // string
         $filter = "v0 = 'bob'";
