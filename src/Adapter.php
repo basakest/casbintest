@@ -263,7 +263,7 @@ class Adapter implements AdapterContract, FilteredAdapter, BatchAdapter
         } elseif (is_string($filter)) {
             $sql .= $filter;
             $rows = $this->connection->query($sql);
-        } else if ($filter instanceof Closure) {
+        } elseif ($filter instanceof Closure) {
             $filter($this->connection, $sql, $this->rows);
         } else {
             throw new InvalidFilterTypeException('invalid filter type');

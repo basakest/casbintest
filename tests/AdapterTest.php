@@ -22,9 +22,9 @@ class AdapterTest extends TestCase
             'hostport' => $this->env('DB_PORT', 3306),
             /*
             'hostname' => '127.0.0.1',
-            'database' => 'weibo',
-            'username' => 'homestead',
-            'password' => 'secret',
+            'database' => 'test',
+            'username' => 'root',
+            'password' => '201916ab',
             'hostport' => 3306,
             */
         ];
@@ -74,22 +74,7 @@ class AdapterTest extends TestCase
             ['bob', 'data2', 'write', '', '', '']
         ], $e->getPolicy());
 
-        // Filter
-        $filter = new Filter(['', '', 'read']);
-        $e->loadFilteredPolicy($filter);
-        $this->assertEquals([
-            ['alice', 'data1', 'read', '', '', ''],
-            ['data2_admin', 'data2', 'read', '', '', ''],
-        ], $e->getPolicy());
-
-        // Closure
-        $e->loadFilteredPolicy(function ($connection, $sql, &$rows) {
-            $rows = $connection->query($sql);
-        });
-
-        $this->assertEquals([
-            ['alice', 'data1', 'read', '', '', ''],
-        ], $e->getPolicy());
+        
     }
 
     public function testAddPolicy()
