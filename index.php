@@ -33,10 +33,15 @@ $sub = "alice"; // the user that wants to access a resource.
 $obj = "data1"; // the resource that is going to be accessed.
 $act = "read"; // the operation that the user performs on the resource.
 //$e->addPolicy('alice', 'data12', 'read');exit;
-$e->clearPolicy();
-var_dump($e->getPolicy());exit;
+//$e->clearPolicy();
+$e->updatePolicy(
+    ['bob', 'data2', 'write'],
+    ['bob', 'data2', 'read']
+);
+var_dump($e->getPolicy());
+exit;
 try {
-    $filter = new Filter(['', '', 'read']);
+    $filter = new Filter(['', '', '']);
     $e->loadFilteredPolicy($filter);
     var_dump($e->getPolicy());
     //var_dump($model['p']['p']->policy);

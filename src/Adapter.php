@@ -19,7 +19,7 @@ use Throwable;
  *
  * @author techlee@qq.com
  */
-class Adapter implements AdapterContract, FilteredAdapter, BatchAdapter
+class Adapter implements AdapterContract, FilteredAdapter, BatchAdapter, UpdatableAdapter
 {
     use AdapterHelper;
 
@@ -104,6 +104,42 @@ class Adapter implements AdapterContract, FilteredAdapter, BatchAdapter
             }));
             $this->loadPolicyLine(trim($line), $model);
         }
+    }
+
+    public function updatePolicy(string $sec, string $ptype, array $oldRule, array $newPolicy): void
+    {
+        $columns = ['v0', 'v1', 'v2', 'v3', 'v4', 'v5'];
+        $sql = 'UPDATE ' . $this->casbinRuleTableName . ' SET ';
+        $set = [];
+        $values = [];
+        foreach ($newPolicy as $key => $value) {
+            array_push($set, $columns[$key] . '=?');
+            $values[$key] = $value;
+        }
+        $columns = ['ptype', 'v0', 'v1', 'v2', 'v3', 'v4', 'v5'];
+        //var_dump($set, $values);exit;
+        $sql .= implode(', ', $set) . ' WHERE ';
+        //var_dump($sql);exit;
+        array_unshift($oldRule, $ptype);
+        //$oldRule['p_type'] = $ptype;
+        $where = [];
+        //$whereValue = [];
+        //var_dump($oldRule);exit;
+        foreach ($oldRule as $key => $value) {
+            array_push($where, $columns[$key] . '=?');
+            $values[] = $value;
+        }
+        
+        $sql .= implode(' AND ', $where);
+        /*
+        echo '<pre>';
+        var_dump($sql);
+        echo '<br />';
+        var_dump($values);
+        exit;
+        */
+        
+        $this->connection->execute($sql, $values);
     }
 
     /**
